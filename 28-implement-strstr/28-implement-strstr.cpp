@@ -11,10 +11,9 @@ public:
             else{
                 if(f==0)
                    arr[l++]=0;
-                else f=arr[arr[f-1]];
+                else f=arr[f-1];
             }
         }
-        // for(auto &i:arr) i--;
         //Algo
         int j=0,i=0;
         
@@ -28,7 +27,6 @@ public:
                     i=arr[i-1];
                 }
             }
-            // cout<<i<<" "<<j<<endl;
             if(i==needle.length()) return j-needle.length();
         }
        return -1;
