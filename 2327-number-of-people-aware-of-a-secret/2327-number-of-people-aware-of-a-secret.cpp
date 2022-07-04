@@ -7,7 +7,7 @@ public:
         long long int size=1;
         int s=1;
         for(int i=1;i<=n;i++){
-            while(s&& i-lst.front().second>=forget){
+            if(s&& i-lst.front().second>=forget){
                 size-=lst.front().first;
                 s--;
                 lst.pop_front();
