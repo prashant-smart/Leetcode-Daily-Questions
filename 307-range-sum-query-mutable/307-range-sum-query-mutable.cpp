@@ -60,7 +60,7 @@ public:
         return lt+rt;
     }
     int sumRange(int left, int right) {
-        cout<<left<<" "<<right<<endl;
+        // cout<<left<<" "<<right<<endl;
         return sumRange_(left,right,0,size-1,1);
     }
 };
