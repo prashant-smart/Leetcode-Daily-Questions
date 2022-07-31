@@ -42,25 +42,19 @@ public:
     }
     
     void update(int idx, int val) {
-        // cout<<size<<" ";
          update_(idx,val,0,size-1,1);
     }
     
     int sumRange_(int &left, int &right,int str,int end,int curr) {
-        if(str>end) return 0;
         if(str>=left&&end<=right){ return tree[curr];}
-        // if(str==end) return tree[curr];
         if(right<str||left>end) return 0;
         
         int mid=(str+end)/2;
-        // cout<<str<<" "<<end<<" "<<mid<<endl;
         int lt=sumRange_(left,right,str,mid,2*curr);
         int rt=sumRange_(left,right,mid+1,end,2*curr+1);
-        // cout<<lt+rt<<" ";
         return lt+rt;
     }
     int sumRange(int left, int right) {
-        // cout<<left<<" "<<right<<endl;
         return sumRange_(left,right,0,size-1,1);
     }
 };
