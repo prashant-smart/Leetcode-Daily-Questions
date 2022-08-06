@@ -1,26 +1,20 @@
 class Solution {
 public:
-    int ans = 0;
-    int solve(int target, vector<int>&nums, vector<int>&dp){
-        //base
-        if(target==0) {
-            return 1;
+    int dp[1001];
+    
+    int helper(vector<int>& nums, int &target,int sum){
+        if(sum==target) return 1;
+        if(sum>target) return 0;
+        if(dp[sum]!=-1) return dp[sum];
+        int ans=0;
+        for(int i=0;i<nums.size();i++){
+            ans+=helper(nums,target,sum+nums[i]);
         }
-        if(target<0) return 0;
-        
-        //check if already we calculated
-        if(dp[target] != -1) return dp[target];
-        
-        //hypo
-        int temp = 0;
-        for(int i=0; i<nums.size(); i++){
-            if(nums[i]<=target) temp += solve(target-nums[i], nums, dp);
-        }
-        return dp[target] = temp;
+        return dp[sum]=ans;
     }
     int combinationSum4(vector<int>& nums, int target) {
-        if(target == 0) return 0;
-        vector<int>dp(target+1, -1);
-        return solve(target, nums, dp);
+        memset(dp,-1,sizeof dp);
+        
+        return helper(nums,target,0);
     }
 };
