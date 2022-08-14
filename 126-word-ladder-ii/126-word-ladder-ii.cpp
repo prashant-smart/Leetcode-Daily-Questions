@@ -1,85 +1,80 @@
-class Solution {
+class Solution { // 4 ms, faster than 99.32%
 public:
-     void helperForGenerateStrings(string s,unordered_set<string>& wordListSet,unordered_map<string,set<string> >& adjLis){
-        string mainString=s;
-        for(int pos=0;pos<mainString.size();pos++){
-            char prevVal=s[pos];
-            for(char c='a';c<='z';c++){
-                s[pos]=c;
-                if(wordListSet.count(s)&&s!=mainString){
-                    adjLis[mainString].insert(s);
-                }
+    bool able(string s,string t){
+    if(s.length()!=t.length())
+        return false;
+    int c=0;
+    for(int i=0;i<s.length();i++)
+        c+=(s[i]!=t[i]);
+    return c==1;
+}
+void bfs(vector<vector<int>> &g,vector<int> parent[],int n,int sr,int ds){
+    vector <int> dist(n,1005);
+    queue <int> q;
+    q.push(sr);
+    parent[sr]={-1};
+    dist[sr]=0;
+    while(!q.empty()){
+        int x=q.front();
+        q.pop();
+        for(int u:g[x]){
+            if(dist[u]>dist[x]+1){
+                dist[u]=dist[x]+1;
+                q.push(u);
+                parent[u].clear();
+                parent[u].push_back(x);
             }
-            s[pos]=prevVal;
+            else if(dist[u]==dist[x]+1)
+                parent[u].push_back(x);
         }
     }
-    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> wordListSet;
-        wordListSet.insert(beginWord);
-        
-        bool isEndWordExist=0;
-        
-        for(auto word:wordList){
-            if(word==endWord) isEndWordExist=1;
-            wordListSet.insert(word);
-        }
-        
-        if(!isEndWordExist){
-            return {};
-        }
-        
-        unordered_map<string,set<string> > adjLis;
-        for(auto iter:wordListSet){
-            string str=iter;
-            helperForGenerateStrings(str,wordListSet,adjLis);
-        }
-        
-        
-        int lengthOfSequence=1;
-        queue<vector<string>> validPathQueue;
-        validPathQueue.push({beginWord});
-        
-        unordered_set<string> visitedWord;
-        
-        bool isBreak=0;
-        
-        while(validPathQueue.size()&&!isBreak){
-            int size=validPathQueue.size();
-            while(size--){
-                vector<string> currVec=validPathQueue.front();
-                string currWord=currVec.back();
-                if(currWord==endWord){
-                    isBreak=1;
-                    break;
-                };
-                
-                validPathQueue.pop();
-                visitedWord.insert(currWord);
-                
-                for(auto ngh:adjLis[currWord]){
-                    
-                    if(!visitedWord.count(ngh)){
-                        // cout<<ngh<<"->"<<lengthOfSequence<<endl;
-                        vector<string> temp=currVec;
-                        temp.push_back(ngh);
-                        validPathQueue.push(temp);
-                    }
-                }
-                
-            }
-            lengthOfSequence++;
-        }
-        
-        vector<vector<string>> ans;
-        // cout<<<<" ";
-        while(validPathQueue.size()){
-            auto vec=validPathQueue.front();
-            validPathQueue.pop();
-            // cout<<vec.back()<<" ";
-            if(vec.back()==endWord&&vec.size()==lengthOfSequence-1){
-                ans.push_back(vec);
-            }
-        }
-        return ans;
+}
+void shortestPaths(vector<vector<int>> &Paths, vector<int> &path, vector<int> parent[],int node){
+    if(node==-1){
+        Paths.push_back(path);
+        return ;
     }
+    for(auto u:parent[node]){
+        path.push_back(u);
+        shortestPaths(Paths,path,parent,u);
+        path.pop_back();
+    }
+}
+vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+    int n=wordList.size(),sr=-1,ds=-1;
+    vector<vector<string>> ANS;
+    for(int i=0;i<n;i++){
+        if(wordList[i]==beginWord)
+            sr=i;
+        if(wordList[i]==endWord)
+            ds=i;
+    }
+    if(ds==-1)
+        return ANS;
+    if(sr==-1){
+        wordList.emplace(wordList.begin(),beginWord);
+        sr=0;
+        ds++;
+        n++;
+    }
+    vector <vector<int>> g(n,vector<int>()),Paths;
+    vector <int> parent[n],path;
+    for(int i=0;i<n-1;i++)
+        for(int j=i+1;j<n;j++)
+            if(able(wordList[i],wordList[j])){
+                g[i].push_back(j);
+                g[j].push_back(i);
+            }
+    bfs(g,parent,n,sr,ds); 
+    shortestPaths(Paths,path,parent,ds);
+    for(auto u:Paths){
+        vector <string> now;
+        for(int i=0;i<u.size()-1;i++)
+            now.push_back(wordList[u[i]]);
+        reverse(now.begin(),now.end());
+        now.push_back(wordList[ds]);
+        ANS.push_back(now);
+    }
+    return ANS;
+}
 };
