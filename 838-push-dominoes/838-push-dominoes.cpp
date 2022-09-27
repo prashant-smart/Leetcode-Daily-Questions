@@ -50,7 +50,7 @@ public:
                     
                 }
             }else l++;
-            cout<<l<<" ";
+            
         }
         return ans;
     }
