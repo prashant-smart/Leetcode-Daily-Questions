@@ -2,11 +2,9 @@ class TimeMap {
 public:
     unordered_map<string,map<int,string>> umap;
     TimeMap() {}
-    
     void set(string key, string value, int timestamp) {
-        umap[key].insert({-1*timestamp,value});
+        umap[key][-1*timestamp]=value;
     }
-    
     string get(string key, int timestamp) {
         if(!umap.count(key)) return "";
         auto it=umap[key].lower_bound(-1*timestamp);
