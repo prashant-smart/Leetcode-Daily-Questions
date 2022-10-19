@@ -1,35 +1,47 @@
 class Solution {
 public:
+    static bool cmp(pair<int,string> &x1,pair<int,string>&x2){
+        return x1.first>x2.first;
+    }
  vector<string> topKFrequent(vector<string>& words, int k) {
-	int size = words.size();
-	vector<vector<string>> bucket(size+1);
-	unordered_map<string, int> table;
-	vector<string> res;
-
-	//generate freq table
-	for (int i = 0; i < size; i++) {
-		table[words[i]]++;
-	}
-
-	//populate the bucket
-	for (auto it = table.begin(); it != table.end(); it++) {
-		vector<string>& temp = bucket[it->second];
-		if (temp.empty()) temp.push_back(it->first);
-		else {
-			int j = 0, n = temp.size();
-			while (j < n && temp[j] < it->first) j++;
-			temp.insert(temp.begin()+j, it->first);
-		}
-	}
-
-	//push topK freq words to res
-	for (int i = bucket.size()-1; i >= 0 && k > 0; i--) {
-		for (int j = 0; j < bucket[i].size() && k > 0; j++) {
-			res.push_back(bucket[i][j]);
-			k--;
-		}
-	}
-
-	return res;
+	unordered_map<string,int> umap;
+     for(auto i:words) umap[i]++;
+     
+     vector<pair<int,string>> vec;
+     for(auto i:umap) vec.push_back({i.second,i.first});
+     
+     sort(begin(vec),end(vec),cmp);
+     
+     map<int,vector<string>> mp;
+     for(auto i:vec){
+        
+         
+         mp[i.first].push_back(i.second);
+        
+     }
+     for(auto &i:mp){
+        sort(begin(i.second),end(i.second)); 
+     }
+     vector<string> ans;
+     
+     
+     
+     for(auto &i:mp){
+         while(i.second.size()){
+             ans.push_back(i.second.back());
+             i.second.pop_back();
+         }
+     }
+     
+     reverse(begin(ans),end(ans));
+     int size=ans.size(); 
+     while(size!=k){
+         ans.pop_back();
+         size--;
+     }
+     return ans;
+     
+     
+     
 }
 };
