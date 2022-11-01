@@ -7,7 +7,7 @@ public:
         if(i>=grid.size()) return j;
         
         int curr=grid[i][j];
-        // cout<<i<<" "<<j<<" "<<prev<<" "<<curr<<endl;
+        
         if(prev==1&&curr==-1&&!isup||prev==-1&&curr==1&&!isup) return -1;
           
         if(grid[i][j]==1){
