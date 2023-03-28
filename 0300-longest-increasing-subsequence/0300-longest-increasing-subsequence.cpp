@@ -10,7 +10,7 @@ public:
                 dp.push_back(i);
             }
             else{
-                dp[it]=min(dp[it],i);
+                dp[it]=i;
             }
         }
         return dp.size();
