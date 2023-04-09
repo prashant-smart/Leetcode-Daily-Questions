@@ -1,12 +1,6 @@
 class Solution {
 public:
-    void remove(multiset<int>&my_multiset,int value){
-            auto itr = my_multiset.find(value);
-            if(itr!=my_multiset.end()){
-                my_multiset.erase(itr);
-    }
 
-    }
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         multiset<int> st;
         int i=0;
@@ -18,9 +12,10 @@ public:
         for(;i<=nums.size();){
             int grt=*--st.end();
             ans.push_back(grt);
-            if(i==nums.size()) break;
-            
-            remove(st,nums[j]);
+            if(i==nums.size()) 
+                break;
+            auto pos=st.find(nums[j]);
+            st.erase(pos);
             st.insert(nums[i]);
             i++,j++;
         }
