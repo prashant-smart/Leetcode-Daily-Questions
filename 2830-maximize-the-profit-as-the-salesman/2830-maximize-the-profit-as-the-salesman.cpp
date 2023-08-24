@@ -1,9 +1,9 @@
 class Solution {
 public:
     static bool cmp(vector<int>&x,vector<int>&y){
-        if(x[1]!=y[1]) return x[1]<y[1];
-        else if(x[2]!=y[2]) return x[2]>y[2];
-        return x[0]<y[0];
+        if(x[0]!=y[0]) return x[0]<y[0];
+        else if(x[1]!=y[1]) return x[1]<y[1];
+        return x[2]>y[2];
     }
     int dp[100001];
     int helper(vector<vector<int>>& vec,vector<int>&fl,int i){
@@ -14,7 +14,7 @@ public:
         return dp[i]=ans;
     }
     int maximizeTheProfit(int n, vector<vector<int>>& vec) {
-        sort(begin(vec),end(vec));
+        sort(begin(vec),end(vec),cmp);
         vector<int> v;
         for(auto i:vec){
             v.push_back(i[0]);
